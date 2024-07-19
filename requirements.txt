@@ -1,0 +1,8 @@
+python-usbtmc
+matplotlib
+pyusb
+libusb
+numpy
+#pyvisa-py
+#pandas
+scipy
