@@ -1,7 +1,10 @@
-# import usbtmc
+#***REZULTATI OVOG PROGRAMA SU SLIKE IMENA BBB_...***
+#***REZULTAT OCITAVANJE INFORMACIJE ODLICAN***
+
+
+
 # import pylab
 import numpy as np
-# from biblioteka import *
 import time
 import socket
 import matplotlib.pyplot as plt
@@ -25,7 +28,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
     data_ = []
 
     #krece da cita 2. i 3. bit jer prva dva nose informaciju o granicama 
-    for c1, c2 in zip(data[2::2], data[3::2]):
+    for c1, c2 in zip(data[10::2], data[11::2]):
         data_.append(c1 + 2**8 * c2)
 
     #d je broj poslatih informacije 1520+2
@@ -100,5 +103,5 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
     sock.close()
 
 
-plt.savefig("VanEckSinglaObrajdenTreskolhom_2.png")
+plt.savefig("BBB_VanEckSinglaObrajdenTreskolhom_3.png")
  
