@@ -37,20 +37,20 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
     data2c2 = []
 
 
-    for c1, c2 in zip(data[2::2], data[3::2]):
+    for c1, c2 in zip(data[10::2], data[11::2]):
         data_.append(c1 + 2**8 * c2)
         data1.append(c1)
         data2.append(c2)
-
+    print(len(data))
     data_ = np.array(data_)
     data_ = np.where(data_ < 2**15, 2**16+data_ , data_) - 2**16
     data_ = -data_
 
-    for c1, c2 in zip(data2[2::2], data2[3::2]):
+    for c1, c2 in zip(data2[10::2], data2[11::2]):
         data_c2.append(c1 +  2**8 * c2)
         data1c2.append(c1)
         data2c2.append(c2)
-
+    print("data2" ,len(data2))
 
     data_c2 = np.array(data_c2)
     data_c2 = np.where(data_c2 < 2**15, 2**16+data_c2 , data_c2) - 2**16
@@ -60,15 +60,18 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
     numeracija = []
     for i in range(d):
         numeracija.append(i)
-
+    numeracija2 = []
+    for i in range(d//2-1):
+        numeracija2.append(i)
+    print(len(data_c2))
 
     fig1,(g1,g2,g,g1c2,g2c2,gc2)= plt.subplots(6)
     g1.plot(numeracija,data1)
     g2.plot(numeracija,data2)
     g.plot(numeracija,data_)
-    g1c2.plot(numeracija,data1c2)
-    g2c2.plot(numeracija,data2c2)
-    gc2.plot(numeracija,data_c2)
+    g1c2.plot(numeracija2,data1c2)
+    g2c2.plot(numeracija2,data2c2)
+    gc2.plot(numeracija2,data_c2)
 
 
     data_s=[]
