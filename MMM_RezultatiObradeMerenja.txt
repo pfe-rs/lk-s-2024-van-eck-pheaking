@@ -1,0 +1,4 @@
+Prosecno trajanje jednog bita 0 traje nula=19.961315789473684  dok su vrednosti u opsegu [19,21]
+Prosecno trajanje jednog bita 1 traje kec=20.01923076923077    dok su vrednosti u opsegu [19,21]
+Prosecno trajanje slanja jednog bita je 19,990273279 priblizno 20.
+Prosecno trajanje delaya od 200msc je kasanj=415.6666666666667 dok su vrednosti u opsegu [415,417]
