@@ -147,7 +147,16 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
     for i in range(d):
         numeracija.append(i)
 
-    plt.plot(numeracija,data_, marker='o' )
+
+    for i in range(len(data_)):
+        if (data_[i]==0):
+            data_[i]=5
+        else:
+            data_[i]=0
+
+
+            
+    plt.plot(numeracija,data_ )
 
 
     sock.close()
@@ -155,7 +164,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
 #plt.hist(data_)
 
 
-plt.savefig("ObradjenSignalDirektno.png")
+plt.savefig("pfe2.png")
     
 
 

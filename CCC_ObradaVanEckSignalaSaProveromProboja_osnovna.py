@@ -16,7 +16,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
     time.sleep(2)
     data = sock.recv(2048)
     print(data)
-    
+   
     #ucitavanje podataka VanEck
     sock.sendall(b':DATA:WAVE:SCREEN:CH1?\r\n')
     time.sleep(4)
@@ -25,7 +25,9 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
     #ucitavanje podataka Direkt
     sock.sendall(b':DATA:WAVE:SCREEN:CH2?\r\n')
     time.sleep(4)
-    data2 = sock.recv(10000)
+    data_2 = sock.recv(10000)
+    #print(len(data), len(data2))
+    # data3 = sock.recv(10000)
 
 
     data_ = []
@@ -42,19 +44,12 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         data1.append(c1)
         data2.append(c2)
     print(len(data))
-    data_ = np.array(data_)
-    data_ = np.where(data_ < 2**15, 2**16+data_ , data_) - 2**16
-    data_ = -data_
 
-    for c1, c2 in zip(data2[10::2], data2[11::2]):
+    for c1, c2 in zip(data_2[10::2], data_2[11::2]):
         data_c2.append(c1 +  2**8 * c2)
         data1c2.append(c1)
         data2c2.append(c2)
-    print("data2" ,len(data2))
-
-    data_c2 = np.array(data_c2)
-    data_c2 = np.where(data_c2 < 2**15, 2**16+data_c2 , data_c2) - 2**16
-    data_c2 = -data_c2
+    print("data2" ,len(data_2))
     
     d=len(data_)
     numeracija = []
@@ -68,10 +63,11 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
     fig1,(g1,g2,g,g1c2,g2c2,gc2)= plt.subplots(6)
     g1.plot(numeracija,data1)
     g2.plot(numeracija,data2)
-    g.plot(numeracija,data_)
-    g1c2.plot(numeracija2,data1c2)
-    g2c2.plot(numeracija2,data2c2)
-    gc2.plot(numeracija2,data_c2)
+    g.plot(numeracija,data_, 'orange')
+    g1c2.plot(numeracija,data1c2)
+    g2c2.plot(numeracija,data2c2)
+    gc2.plot(numeracija,data_c2)
+
 
 
     data_s=[]
@@ -84,5 +80,5 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
     sock.close()
 
 
-plt.savefig("Knali.png")
+plt.savefig("CCC_pfer.png")
  

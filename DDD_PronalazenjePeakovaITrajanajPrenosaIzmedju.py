@@ -62,7 +62,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
     sock.sendall(b':DATA:WAVE:SCREEN:HEAD?\r\n')
     time.sleep(2)
     data = sock.recv(2048)
-    print(data)
+    #print(data)
     sock.sendall(b':DATA:WAVE:SCREEN:CH1?\r\n')
     time.sleep(4)
     data = sock.recv(10000)
@@ -74,6 +74,13 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
     for c1, c2 in zip(data[4::2], data[5::2]):
         data_.append(c1 + 2**8 * c2)
 
+    c1=data[0::2]
+    c2=data[1::2]
+    #print("MAX",c1+2**8*c2)
+    c1=data[2::2]
+    c2=data[3::2]
+    #print("MINI",c1+2**8*c2)
+
     #d je broj poslatih informacije 1520+2
     d=len(data_)
     
@@ -84,9 +91,9 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         data_s.append(data_[i])
     data_s.sort()
 
-    mini=data_s[10]
+    mini=data_s[2]
     #print(mini)
-    maks=data_s[d-10-1]
+    maks=data_s[d-2-1]
     
     for i in range(d):
         data_[i]=data_[i]-mini
@@ -105,6 +112,10 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
     numeracija= []
     for i in range(d):
         numeracija.append(i)
+
+    data_p=[]
+    for i in data_:
+        data_p.append(i)
 
     for i in range(d):
         if(data_[i]>1.8 and data_[i]<3.2):
@@ -154,6 +165,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         
         
         i=par[0]
+        p1=0
+        p2=0
         rastojanja.append([maks,mini])
         while(i!=par[1]+1):
             if(data_[i]!='a'):
@@ -169,6 +182,10 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
                         p2=i
 
             i=i+1
+        if (p1==0):
+            p1=p2
+        elif(p2==0):
+            p2=p1
         pozicije.append([p1,p2])
 
 
@@ -209,9 +226,11 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
     kombo=[]
     if (rastojanja[0][0]>rastojanja[0][1]):
         if(duzina[0]>=19):
+            #print(0,duzina[0])
             kombo.append([0,duzina[0]])
     else:
         if(duzina[1]>=19):
+            #print(1,duzina[1])
             kombo.append([1,duzina[1]])
     
     for par in rastojanja:
@@ -221,6 +240,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
             #print("UP")
             if(k<len(duzina)):
                 if(duzina[k]>=19):
+                    #print(1,duzina[k])
                     kombo.append([1,duzina[k]])
             k=k+1
             visina.append("UP")
@@ -229,7 +249,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
             #k=k+1
             #print("DOWN")
             if(k<len(duzina)):
-                if(duzina[1]>=19):
+                if(duzina[k]>=19):
                     kombo.append([0,duzina[k]])
             k=k+1
             visina.append("DOWN")
@@ -279,6 +299,14 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
             for i in range(len(kombo)):
                 kombo[i][0]=patern2[i]
 
+
+    kd=len(kombo)
+    if (kombo[kd-1][0]!=1):
+        for i in range(kd):
+            if(kombo[i][0]==1):
+                kombo[i][0]=0
+            else:
+                kombo[i][0]=1
     #print("PROMENA SMERA UP - SA 0 NA 1 ---- DOWN - SA 1 NA 0")
     #print(visina)
 
@@ -295,7 +323,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
 
     rezultat=[]
     for par in kombo:
-        brpn=par[1]/19.9
+        brpn=par[1]/19
         i=1
         if(brpn<6):
             if(brpn>5):
@@ -316,7 +344,6 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
                     i=i+1
             
         
-    print(rezultat)
 
     rec=find_encoded_word(rezultat)
 
@@ -334,8 +361,6 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
     numeracija2=[]
     for i in range(len(r)):
         numeracija2.append(i)
-    plt.plot(numeracija2,r)
-
 
     p=[]
     for par in kombo:
@@ -352,8 +377,14 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
     for i in range(len(p)):
         numeracija3.append(i)
     
-    plt.plot(numeracija3,p)
-    plt.title(rec)
+
+    fig1,(g1,g2,g3)= plt.subplots(3)
+    g1.plot(numeracija,data_p, color='red')
+    g1.set_title(rec)
+    g3.plot(numeracija2,r)
+    g2.plot(numeracija3,p)
+    
+
 
 
     zeros=0
@@ -364,8 +395,14 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
 
     sock.close()
 
+print(rezultat)
 
 print("plotuje ga")
-plt.savefig("test.png")
-#plt.savefig("DDD_sava_dekodovano.png")
- 
+#plt.savefig("test.png")
+#print(r)
+#print(p)
+plt.savefig("test2.png")
+
+
+#plt.savefig("DDD_NOKC10cm4_ekodovano.png")
+#ne redi na velikoj udaljenosti

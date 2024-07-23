@@ -103,5 +103,5 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
     sock.close()
 
 
-plt.savefig("BBB_VanEckSinglaObrajdenTreskolhom_3.png")
+plt.savefig("pfe3.png")
  
